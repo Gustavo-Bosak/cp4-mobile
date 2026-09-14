@@ -7,8 +7,8 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-// import { signOut, deleteUser, AuthError } from "firebase/auth";
-// import { auth } from "../../firebaseConfig";
+import { signOut, deleteUser, AuthError } from "firebase/auth";
+import { auth } from "../../services/firebaseConfig";
 import { useAuth } from "../../context/AuthContext";
 
 export default function HomeScreen() {

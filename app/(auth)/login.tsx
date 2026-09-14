@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Link } from "expo-router";
 import { signInWithEmailAndPassword, AuthError } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+import { auth } from "../../services/firebaseConfig";
 
 function traduzirErro(code: string): string {
   switch (code) {
