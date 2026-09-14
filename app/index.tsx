@@ -1,21 +1,26 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { Redirect } from "expo-router";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { useAuth } from "../context/AuthContext";
 
 export default function Index() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
-    </View>
-  );
+  const { user, initializing } = useAuth();
+
+  if (initializing) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#4f46e5" />
+      </View>
+    );
+  }
+
+  return <Redirect href={user ? "/(app)/home" : "/(auth)/login"} />;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
   },
 });
