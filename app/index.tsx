@@ -1,9 +1,9 @@
 import { Text, View, StyleSheet } from 'react-native';
 
-export default function TabOneScreen() {
+export default function Index() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Page</Text>
+      <Text style={styles.title}>Home</Text>
     </View>
   );
 }
