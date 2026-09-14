@@ -15,7 +15,7 @@ import {
   updateProfile,
   AuthError,
 } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+import { auth } from "../../services/firebaseConfig";
 
 function emailValido(valor: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
