@@ -86,6 +86,10 @@ Após o `npm start`, escaneie o QR Code com o app **Expo Go** (Android) ou pela 
 
 ## Vídeo demonstração
 
+Pelo github, arquivo se encontra na pasta docs/
+
+Por repositório local, visualize o player abaixo:
+
 <video src="./docs/demonstracao.mp4" controls="controls" width="50%">
 </video>
 
