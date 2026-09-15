@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from 'react'
 import {
   Text,
   TextInput,
@@ -7,89 +7,91 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
-} from "react-native";
-import { Link } from "expo-router";
+  ScrollView
+} from 'react-native'
+import { Link } from 'expo-router'
 import {
   createUserWithEmailAndPassword,
   updateProfile,
-  AuthError,
-} from "firebase/auth";
-import { auth } from "../../services/firebaseConfig";
+  AuthError
+} from 'firebase/auth'
+import { auth } from '../../services/firebaseConfig'
 
-function emailValido(valor: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+function emailValido (valor: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)
 }
 
-function traduzirErro(code: string): string {
+function traduzirErro (code: string): string {
   switch (code) {
-    case "auth/email-already-in-use":
-      return "Este e-mail já está cadastrado.";
-    case "auth/invalid-email":
-      return "E-mail inválido.";
-    case "auth/weak-password":
-      return "A senha deve ter no mínimo 6 caracteres.";
+    case 'auth/email-already-in-use':
+      return 'Este e-mail já está cadastrado.'
+    case 'auth/invalid-email':
+      return 'E-mail inválido.'
+    case 'auth/weak-password':
+      return 'A senha deve ter no mínimo 6 caracteres.'
     default:
-      return "Não foi possível criar a conta. Tente novamente.";
+      return 'Não foi possível criar a conta. Tente novamente.'
   }
 }
 
-export default function SignUpScreen() {
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [confirmarSenha, setConfirmarSenha] = useState("");
-  const [erro, setErro] = useState("");
-  const [sucesso, setSucesso] = useState("");
-  const [carregando, setCarregando] = useState(false);
+export default function SignUpScreen () {
+  const [nome, setNome] = useState('')
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+  const [confirmarSenha, setConfirmarSenha] = useState('')
+  const [erro, setErro] = useState('')
+  const [sucesso, setSucesso] = useState('')
+  const [carregando, setCarregando] = useState(false)
 
   const handleCadastro = async () => {
-    setErro("");
-    setSucesso("");
+    setErro('')
+    setSucesso('')
 
     if (!nome || !email || !senha || !confirmarSenha) {
-      setErro("Preencha todos os campos.");
-      return;
+      setErro('Preencha todos os campos.')
+      return
     }
     if (!emailValido(email)) {
-      setErro("Informe um e-mail válido.");
-      return;
+      setErro('Informe um e-mail válido.')
+      return
     }
     if (senha !== confirmarSenha) {
-      setErro("As senhas não coincidem.");
-      return;
+      setErro('As senhas não coincidem.')
+      return
     }
 
-    setCarregando(true);
+    setCarregando(true)
     try {
       const credenciais = await createUserWithEmailAndPassword(
         auth,
         email.trim(),
         senha
-      );
-      await updateProfile(credenciais.user, { displayName: nome.trim() });
-      setSucesso("Conta criada com sucesso!");
-      // O AuthContext detecta o novo usuário automaticamente e o
-      // app/index.tsx redireciona para a área autenticada.
+      )
+      await updateProfile(credenciais.user, { displayName: nome.trim() })
+      setSucesso('Conta criada com sucesso!')
     } catch (e) {
-      setErro(traduzirErro((e as AuthError).code));
+      setErro(traduzirErro((e as AuthError).code))
     } finally {
-      setCarregando(false);
+      setCarregando(false)
     }
-  };
+  }
 
   return (
     <KeyboardAvoidingView
       style={styles.flex}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 24}
     >
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps='handled'
+      >
         <Text style={styles.titulo}>Criar conta</Text>
 
         <Text style={styles.label}>Nome</Text>
         <TextInput
           style={styles.input}
-          placeholder="Seu nome"
+          placeholder='Seu nome'
           value={nome}
           onChangeText={setNome}
         />
@@ -97,9 +99,9 @@ export default function SignUpScreen() {
         <Text style={styles.label}>E-mail</Text>
         <TextInput
           style={styles.input}
-          placeholder="seuemail@exemplo.com"
-          autoCapitalize="none"
-          keyboardType="email-address"
+          placeholder='seuemail@exemplo.com'
+          autoCapitalize='none'
+          keyboardType='email-address'
           value={email}
           onChangeText={setEmail}
         />
@@ -107,7 +109,7 @@ export default function SignUpScreen() {
         <Text style={styles.label}>Senha</Text>
         <TextInput
           style={styles.input}
-          placeholder="Mínimo 6 caracteres"
+          placeholder='Mínimo 6 caracteres'
           secureTextEntry
           value={senha}
           onChangeText={setSenha}
@@ -116,7 +118,7 @@ export default function SignUpScreen() {
         <Text style={styles.label}>Confirmar senha</Text>
         <TextInput
           style={styles.input}
-          placeholder="Repita a senha"
+          placeholder='Repita a senha'
           secureTextEntry
           value={confirmarSenha}
           onChangeText={setConfirmarSenha}
@@ -131,76 +133,76 @@ export default function SignUpScreen() {
           disabled={carregando}
         >
           {carregando ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color='#fff' />
           ) : (
             <Text style={styles.textoBotao}>Cadastrar</Text>
           )}
         </TouchableOpacity>
 
-        <Link href="/(auth)/login" style={styles.link}>
+        <Link href='/(auth)/login' style={styles.link}>
           Já tem conta? Fazer login
         </Link>
       </ScrollView>
     </KeyboardAvoidingView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   container: {
     flexGrow: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: 24,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff'
   },
   titulo: {
     fontSize: 28,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 24,
-    color: "#111827",
-    textAlign: "center",
+    color: '#111827',
+    textAlign: 'center'
   },
   label: {
     fontSize: 14,
-    color: "#374151",
+    color: '#374151',
     marginBottom: 4,
-    marginTop: 12,
+    marginTop: 12
   },
   input: {
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: '#d1d5db',
     borderRadius: 8,
     padding: 12,
-    fontSize: 16,
+    fontSize: 16
   },
   erro: {
-    color: "#dc2626",
+    color: '#dc2626',
     marginTop: 12,
-    textAlign: "center",
+    textAlign: 'center'
   },
   sucesso: {
-    color: "#16a34a",
+    color: '#16a34a',
     marginTop: 12,
-    textAlign: "center",
+    textAlign: 'center'
   },
   botao: {
-    backgroundColor: "#4f46e5",
+    backgroundColor: '#4f46e5',
     borderRadius: 8,
     padding: 14,
     marginTop: 24,
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 48
   },
   textoBotao: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600'
   },
   link: {
-    color: "#4f46e5",
+    color: '#4f46e5',
     fontSize: 14,
-    textAlign: "center",
-    marginTop: 16,
-  },
-});
+    textAlign: 'center',
+    marginTop: 16
+  }
+})

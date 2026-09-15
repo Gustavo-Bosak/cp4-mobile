@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from 'react'
 import {
   Text,
   TextInput,
@@ -7,53 +7,57 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
-} from "react-native";
-import { Link } from "expo-router";
-import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../../services/firebaseConfig";
+  ScrollView
+} from 'react-native'
+import { Link } from 'expo-router'
+import { sendPasswordResetEmail } from 'firebase/auth'
+import { auth } from '../../services/firebaseConfig'
 
-export default function ForgotPasswordScreen() {
-  const [email, setEmail] = useState("");
-  const [mensagem, setMensagem] = useState("");
-  const [erro, setErro] = useState("");
-  const [carregando, setCarregando] = useState(false);
+export default function ForgotPasswordScreen () {
+  const [email, setEmail] = useState('')
+  const [mensagem, setMensagem] = useState('')
+  const [erro, setErro] = useState('')
+  const [carregando, setCarregando] = useState(false)
 
   const handleRecuperarSenha = async () => {
-    setErro("");
-    setMensagem("");
+    setErro('')
+    setMensagem('')
 
     if (!email) {
-      setErro("Informe seu e-mail.");
-      return;
+      setErro('Informe seu e-mail.')
+      return
     }
 
-    setCarregando(true);
+    setCarregando(true)
     try {
-      await sendPasswordResetEmail(auth, email.trim());
+      await sendPasswordResetEmail(auth, email.trim())
     } catch {
     } finally {
-      setCarregando(false);
+      setCarregando(false)
       setMensagem(
-        "Se o e-mail estiver cadastrado, você receberá as instruções para redefinir sua senha."
-      );
+        'Se o e-mail estiver cadastrado, você receberá as instruções para redefinir sua senha.'
+      )
     }
-  };
+  }
 
   return (
     <KeyboardAvoidingView
       style={styles.flex}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 24}
     >
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps='handled'
+      >
         <Text style={styles.titulo}>Esqueci minha senha</Text>
 
         <Text style={styles.label}>E-mail</Text>
         <TextInput
           style={styles.input}
-          placeholder="seuemail@exemplo.com"
-          autoCapitalize="none"
-          keyboardType="email-address"
+          placeholder='seuemail@exemplo.com'
+          autoCapitalize='none'
+          keyboardType='email-address'
           value={email}
           onChangeText={setEmail}
         />
@@ -67,76 +71,76 @@ export default function ForgotPasswordScreen() {
           disabled={carregando}
         >
           {carregando ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color='#fff' />
           ) : (
             <Text style={styles.textoBotao}>Enviar instruções</Text>
           )}
         </TouchableOpacity>
 
-        <Link href="/(auth)/login" style={styles.link}>
+        <Link href='/(auth)/login' style={styles.link}>
           Voltar para o login
         </Link>
       </ScrollView>
     </KeyboardAvoidingView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   container: {
     flexGrow: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: 24,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff'
   },
   titulo: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 24,
-    color: "#111827",
-    textAlign: "center",
+    color: '#111827',
+    textAlign: 'center'
   },
   label: {
     fontSize: 14,
-    color: "#374151",
+    color: '#374151',
     marginBottom: 4,
-    marginTop: 12,
+    marginTop: 12
   },
   input: {
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: '#d1d5db',
     borderRadius: 8,
     padding: 12,
-    fontSize: 16,
+    fontSize: 16
   },
   erro: {
-    color: "#dc2626",
+    color: '#dc2626',
     marginTop: 12,
-    textAlign: "center",
+    textAlign: 'center'
   },
   sucesso: {
-    color: "#16a34a",
+    color: '#16a34a',
     marginTop: 12,
-    textAlign: "center",
+    textAlign: 'center'
   },
   botao: {
-    backgroundColor: "#4f46e5",
+    backgroundColor: '#4f46e5',
     borderRadius: 8,
     padding: 14,
     marginTop: 24,
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 48
   },
   textoBotao: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600'
   },
   link: {
-    color: "#4f46e5",
+    color: '#4f46e5',
     fontSize: 14,
-    textAlign: "center",
-    marginTop: 16,
-  },
-});
+    textAlign: 'center',
+    marginTop: 16
+  }
+})
