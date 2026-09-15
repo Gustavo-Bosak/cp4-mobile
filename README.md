@@ -9,6 +9,7 @@
 | Nome   | RM |
 | -------- | ------- |
 | Gustavo Bosak | RM566315 |
+| Felipe Ferrete | RM562999 |
 
 ## Descrição do projeto
 
