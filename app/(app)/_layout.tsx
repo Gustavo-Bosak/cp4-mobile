@@ -8,5 +8,19 @@ export default function AppLayout () {
     return <Redirect href='/(auth)/login' />
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />
+  return (
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#4f46e5',
+        },
+        headerTintColor: '#fff',
+      }}
+    >
+      <Stack.Screen name='home' options={{ title: 'Início' }} />
+      <Stack.Screen name='perfil' options={{ title: 'Minha conta' }} />
+      <Stack.Screen name='gasto/novo' options={{ title: 'Novo gasto' }} />
+      <Stack.Screen name='gasto/[id]' options={{ title: 'Editar gasto' }} />
+    </Stack>
+  )
 }
