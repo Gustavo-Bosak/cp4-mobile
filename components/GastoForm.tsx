@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import {
+  View,
   Text,
   TextInput,
   TouchableOpacity,
@@ -20,6 +21,16 @@ type ValoresFormulario = {
   categoria: string
   data: string
 }
+
+const CATEGORIAS = [
+  'Alimentação',
+  'Transporte',
+  'Moradia',
+  'Saúde',
+  'Lazer',
+  'Educação',
+  'Outro'
+]
 
 function formatarData (data: Date): string {
   return data.toLocaleDateString('pt-BR')
@@ -59,7 +70,23 @@ export default function GastoForm ({
 }: Props) {
   const [descricao, setDescricao] = useState(valoresIniciais.descricao)
   const [valor, setValor] = useState(valoresIniciais.valor)
-  const [categoria, setCategoria] = useState(valoresIniciais.categoria)
+
+  const categoriaConhecida = CATEGORIAS.slice(0, -1).includes(
+    valoresIniciais.categoria
+  )
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState(
+    valoresIniciais.categoria
+      ? categoriaConhecida
+        ? valoresIniciais.categoria
+        : 'Outro'
+      : ''
+  )
+  const [categoriaPersonalizada, setCategoriaPersonalizada] = useState(
+    valoresIniciais.categoria && !categoriaConhecida
+      ? valoresIniciais.categoria
+      : ''
+  )
+
   const [data, setData] = useState<Date>(
     valoresIniciais.data ? parseData(valoresIniciais.data) : new Date()
   )
@@ -83,12 +110,12 @@ export default function GastoForm ({
   const handleSalvar = () => {
     setErro('')
 
-    if (
-      !descricao.trim() ||
-      !categoria.trim() ||
-      !data ||
-      !valor.trim()
-    ) {
+    const categoriaFinal =
+      categoriaSelecionada === 'Outro'
+        ? categoriaPersonalizada.trim()
+        : categoriaSelecionada
+
+    if (!descricao.trim() || !categoriaFinal || !data || !valor.trim()) {
       setErro('Preencha todos os campos.')
       return
     }
@@ -106,7 +133,7 @@ export default function GastoForm ({
     onSalvar({
       descricao: descricao.trim(),
       valor: valorNumerico,
-      categoria: categoria.trim(),
+      categoria: categoriaFinal,
       data: formatarData(data)
     })
   }
@@ -139,12 +166,39 @@ export default function GastoForm ({
         />
 
         <Text style={styles.label}>Categoria</Text>
-        <TextInput
-          style={styles.input}
-          placeholder='Ex: Alimentação'
-          value={categoria}
-          onChangeText={setCategoria}
-        />
+        <View style={styles.categoriasContainer}>
+          {CATEGORIAS.map(opcao => {
+            const selecionada = categoriaSelecionada === opcao
+            return (
+              <TouchableOpacity
+                key={opcao}
+                style={[
+                  styles.categoriaChip,
+                  selecionada && styles.categoriaChipSelecionada
+                ]}
+                onPress={() => setCategoriaSelecionada(opcao)}
+              >
+                <Text
+                  style={[
+                    styles.categoriaChipTexto,
+                    selecionada && styles.categoriaChipTextoSelecionado
+                  ]}
+                >
+                  {opcao}
+                </Text>
+              </TouchableOpacity>
+            )
+          })}
+        </View>
+
+        {categoriaSelecionada === 'Outro' && (
+          <TextInput
+            style={[styles.input, styles.categoriaOutroInput]}
+            placeholder='Digite a categoria'
+            value={categoriaPersonalizada}
+            onChangeText={setCategoriaPersonalizada}
+          />
+        )}
 
         <Text style={styles.label}>Data</Text>
         <TouchableOpacity
@@ -211,6 +265,33 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16
+  },
+  categoriasContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8
+  },
+  categoriaChip: {
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 14
+  },
+  categoriaChipSelecionada: {
+    backgroundColor: '#4f46e5',
+    borderColor: '#4f46e5'
+  },
+  categoriaChipTexto: {
+    fontSize: 14,
+    color: '#374151'
+  },
+  categoriaChipTextoSelecionado: {
+    color: '#fff',
+    fontWeight: '600'
+  },
+  categoriaOutroInput: {
+    marginTop: 12
   },
   textoData: {
     fontSize: 16,
