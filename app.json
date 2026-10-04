@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "cp4-mobile",
-    "slug": "cp4-mobile",
-    "version": "1.0.0",
+    "name": "Spendo",
+    "slug": "spendo",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "cp4mobile",
+    "scheme": "spendo",
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true
