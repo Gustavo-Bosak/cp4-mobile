@@ -5,12 +5,12 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  ActivityIndicator,
-  Alert
+  ActivityIndicator
 } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { useAuth } from '../../context/AuthContext'
 import { escutarGastos, excluirGasto, Gasto } from '../../services/gastos'
+import { useAlert } from '@/context/AlertContext'
 
 function formatarValor (valor: number): string {
   return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -18,6 +18,7 @@ function formatarValor (valor: number): string {
 
 export default function HomeScreen () {
   const { user } = useAuth()
+  const { exibirAlerta } = useAlert()
   const router = useRouter()
   const [gastos, setGastos] = useState<Gasto[]>([])
   const [carregando, setCarregando] = useState(true)
@@ -33,7 +34,7 @@ export default function HomeScreen () {
       },
       () => {
         setCarregando(false)
-        Alert.alert('Erro', 'Não foi possível carregar os gastos.')
+        exibirAlerta('Erro', 'Não foi possível carregar os gastos.')
       }
     )
 
@@ -41,7 +42,7 @@ export default function HomeScreen () {
   }, [user])
 
   const handleExcluir = (item: Gasto) => {
-    Alert.alert(
+    exibirAlerta(
       'Excluir registro',
       'Tem certeza que deseja excluir este registro?',
       [
@@ -53,9 +54,9 @@ export default function HomeScreen () {
             if (!user) return
             try {
               await excluirGasto(user.uid, item.id)
-              Alert.alert('Sucesso', 'Registro excluído.')
+              exibirAlerta('Sucesso', 'Registro excluído.')
             } catch {
-              Alert.alert('Erro', 'Não foi possível excluir o registro.')
+              exibirAlerta('Erro', 'Não foi possível excluir o registro.')
             }
           }
         }

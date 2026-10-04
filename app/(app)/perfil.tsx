@@ -4,15 +4,16 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   ActivityIndicator
 } from 'react-native'
 import { signOut, deleteUser, AuthError } from 'firebase/auth'
 import { auth } from '../../services/firebaseConfig'
 import { useAuth } from '../../context/AuthContext'
+import { useAlert } from '@/context/AlertContext'
 
 export default function PerfilScreen () {
   const { user } = useAuth()
+  const { exibirAlerta } = useAlert()
   const [carregando, setCarregando] = useState(false)
 
   if (!user) {
@@ -23,7 +24,7 @@ export default function PerfilScreen () {
     try {
       await signOut(auth)
     } catch {
-      Alert.alert('Erro', 'Não foi possível sair da conta.')
+      exibirAlerta('Erro', 'Não foi possível sair da conta.')
     }
   }
 
@@ -34,13 +35,13 @@ export default function PerfilScreen () {
     } catch (e) {
       const authError = e as AuthError
       if (authError.code === 'auth/requires-recent-login') {
-        Alert.alert(
+        exibirAlerta(
           'Sessão expirada',
           'Por segurança, faça login novamente antes de excluir a conta.'
         )
         await signOut(auth)
       } else {
-        Alert.alert('Erro', 'Não foi possível excluir a conta.')
+        exibirAlerta('Erro', 'Não foi possível excluir a conta.')
       }
     } finally {
       setCarregando(false)
@@ -48,7 +49,7 @@ export default function PerfilScreen () {
   }
 
   const handleExcluirConta = () => {
-    Alert.alert(
+    exibirAlerta(
       'Excluir conta',
       'Tem certeza que deseja excluir sua conta? Essa ação não poderá ser desfeita.',
       [

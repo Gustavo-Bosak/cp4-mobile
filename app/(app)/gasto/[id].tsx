@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, Text, ActivityIndicator, StyleSheet, Alert } from 'react-native'
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import GastoForm from '../../../components/GastoForm'
 import { useAuth } from '../../../context/AuthContext'
@@ -9,10 +9,12 @@ import {
   Gasto,
   GastoDados
 } from '../../../services/gastos'
+import { useAlert } from '@/context/AlertContext'
 
 export default function EditarGastoScreen () {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { user } = useAuth()
+  const { exibirAlerta } = useAlert()
   const router = useRouter()
 
   const [gasto, setGasto] = useState<Gasto | null>(null)
@@ -43,7 +45,7 @@ export default function EditarGastoScreen () {
       await atualizarGasto(user.uid, id, dados)
       router.back()
     } catch {
-      Alert.alert(
+      exibirAlerta(
         'Erro',
         'Não foi possível atualizar o gasto. Tente novamente.'
       )

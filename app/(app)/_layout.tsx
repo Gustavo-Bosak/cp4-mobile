@@ -12,9 +12,9 @@ export default function AppLayout () {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#4f46e5',
+          backgroundColor: '#4f46e5'
         },
-        headerTintColor: '#fff',
+        headerTintColor: '#fff'
       }}
     >
       <Stack.Screen name='home' options={{ title: 'Início' }} />
